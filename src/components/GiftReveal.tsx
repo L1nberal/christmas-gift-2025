@@ -3,9 +3,11 @@ import confetti from "canvas-confetti";
 
 interface GiftRevealProps {
   onRestart: () => void;
+  userType: "friend" | "family";
+  isReady: boolean;
 }
 
-const GiftReveal = ({ onRestart }: GiftRevealProps) => {
+const GiftReveal = ({ onRestart, userType, isReady }: GiftRevealProps) => {
   const [stage, setStage] = useState<"intro" | "reveal" | "message">("intro");
 
   useEffect(() => {
@@ -112,9 +114,19 @@ const GiftReveal = ({ onRestart }: GiftRevealProps) => {
           </div>
 
           <p className="text-xl md:text-2xl text-christmas-cream leading-relaxed mb-6">
-            Cảm ơn bạn đã tham gia trò chơi! 
-            <br />
-            <span className="text-christmas-gold">Santa Claus</span> gửi tặng bạn món quà đặc biệt:
+            {isReady ? (
+              <>
+                Cảm ơn bạn đã tham gia trò chơi! 
+                <br />
+                <span className="text-christmas-gold">Santa Claus</span> gửi tặng bạn món quà đặc biệt:
+              </>
+            ) : (
+              <>
+                <span className="text-christmas-gold text-3xl font-christmas">Không sẵn sàng cũng phải nhận! 😂</span>
+                <br />
+                <span className="text-christmas-gold">Santa Claus</span> vẫn gửi quà cho bạn:
+              </>
+            )}
           </p>
 
           <div className="p-6 rounded-2xl bg-gradient-to-br from-christmas-red/20 to-christmas-green/20 border border-christmas-gold/30">
@@ -122,9 +134,19 @@ const GiftReveal = ({ onRestart }: GiftRevealProps) => {
               ✨ Lời chúc Giáng Sinh An Lành ✨
             </p>
             <p className="text-christmas-cream/80 mt-4 text-lg">
-              Chúc bạn và gia đình một mùa Giáng Sinh ấm áp, 
-              <br />
-              tràn đầy yêu thương và hạnh phúc! 🎄❤️
+              {userType === "friend" ? (
+                <>
+                  Chúc bạn và gia đình một mùa Giáng Sinh ấm áp, 
+                  <br />
+                  tràn đầy yêu thương và hạnh phúc! 🎄❤️
+                </>
+              ) : (
+                <>
+                  Cảm ơn gia đình đã luôn yêu thương và ủng hộ!
+                  <br />
+                  Chúc cả nhà mình Giáng Sinh thật vui vẻ và ấm cúng! 🏠💕
+                </>
+              )}
             </p>
           </div>
 

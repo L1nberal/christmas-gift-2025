@@ -14,6 +14,7 @@ type GameState = "selection" | "questionnaire" | "gift";
 const Index = () => {
   const [gameState, setGameState] = useState<GameState>("selection");
   const [userType, setUserType] = useState<"friend" | "family" | null>(null);
+  const [isReady, setIsReady] = useState(true);
 
   const handleRoleSelect = (role: "friend" | "family") => {
     setUserType(role);
@@ -21,6 +22,10 @@ const Index = () => {
   };
 
   const handleQuestionnaireComplete = async (responses: Record<string, string>) => {
+    // Check if user chose "not ready" (Chưa)
+    const readyAnswer = responses.ready || "";
+    setIsReady(!readyAnswer.includes("Chưa"));
+
     try {
       // Save responses to database
       const { error } = await supabase
@@ -44,6 +49,7 @@ const Index = () => {
   const handleRestart = () => {
     setGameState("selection");
     setUserType(null);
+    setIsReady(true);
   };
 
   const handleBack = () => {
@@ -84,8 +90,8 @@ const Index = () => {
         />
       )}
       
-      {gameState === "gift" && (
-        <GiftReveal onRestart={handleRestart} />
+      {gameState === "gift" && userType && (
+        <GiftReveal onRestart={handleRestart} userType={userType} isReady={isReady} />
       )}
     </div>
   );
